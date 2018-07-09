@@ -27,4 +27,6 @@ __meta__ = {
 
 shape = SubResource( 1 )
 
+[connection signal="body_entered" from="." to="." method="_on_Sword_body_entered"]
+
 

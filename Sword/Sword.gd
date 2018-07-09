@@ -21,3 +21,8 @@ func finish():
 #	# Called every frame. Delta is time since last frame.
 #	# Update game logic here.
 #	pass
+
+
+func _on_Sword_body_entered( body ):
+	if(body.get_name() == "MobPatroll"):
+		body.damage(50)

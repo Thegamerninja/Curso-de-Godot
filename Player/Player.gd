@@ -6,6 +6,7 @@ var speed = 200
 var swordLoad = load("res://Sword/Sword.tscn")
 var swordInstance
 var is_atack = false
+var hp = 100
 
 func _ready():
 	set_physics_process(true)
@@ -49,7 +50,10 @@ func move(delta):
 		velocity.y = 0
 		
 		if(Input.is_action_pressed("ui_up") && !is_atack):
-			velocity.y = -125
+			velocity.y = -400
+	
+	if(Input.is_action_just_released("ui_up") && !is_atack):
+		velocity.y += 200
 	
 	move_and_slide(velocity, Vector2(0, -1))
 	
@@ -75,6 +79,14 @@ func animation():
 	if(velocity.y > 0 && !is_on_floor() && !is_atack):
 		$AnimatedSprite.animation = "Fall"
 
+
+func damage(damage):
+	hp -= damage
+	checkLife()
+
+func checkLife():
+	if(hp <= 0):
+		queue_free()
 
 
 func _on_AnimatedSprite_animation_finished():

@@ -2,19 +2,16 @@ extends KinematicBody2D
 
 var velocity = Vector2(1, 0)
 var gravity = 400
-var speed = 200
-var follow = false
+var speed = 150
+var hp = 100
 
 func _ready():
 	set_physics_process(true)
 
 func _physics_process(delta):
 	
-	if(follow):
-		speed = 400
 		
-	else:
-		speed = 200
+		
 	
 	velocity.y += gravity * delta
 	
@@ -29,10 +26,25 @@ func _physics_process(delta):
 		
 	
 	move_and_slide(Vector2(velocity.x * speed, velocity.y), Vector2(0, -1))
+	if(get_slide_count() > 0):
+		var mobCollision = get_slide_collision(get_slide_count() - 1)
+		if(mobCollision != null):
+			if(mobCollision.collider.get_name() == "Player"):
+				mobCollision.collider.damage(100)
+
+
+func damage(damage):
+	hp -= damage
+	checkLife()
+
+func checkLife():
+	if(hp <= 0):
+		queue_free()
+
 
 func _on_MobAreaVisible_body_entered( body ):
 	if(body.get_name() == "Player"):
-		follow = true
+		speed = 300
 		
 		
 
@@ -41,4 +53,4 @@ func _on_MobAreaVisible_body_entered( body ):
 
 func _on_MobAreaVisible_body_exited( body ):
 	if(body.get_name() == "Player"):
-		follow = false
+		speed = 150
